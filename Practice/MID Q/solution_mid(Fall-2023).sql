@@ -83,16 +83,16 @@ WHERE p.product_name = 'p_name-1';
 -- p_name-1 = Headphones
 
 -- B
-SELECT  c.customer_name, sum(p.price) as To_amount
-FROM customer c
-JOIN Order_ o
-    ON c.customer_id = o.customer_id
-JOIN ORDERITEM ot
-    ON o.order_id = ot.order_id
-JOIN PRODUCT p
-    ON ot.product_id = p.product_id
+SELECT  customer_name, (sum(price*quantity))
+FROM customer 
+JOIN Order_
+    using(customer_id)
+JOIN ORDERITEM 
+    using(order_id)
+JOIN PRODUCT 
+    using(product_id )
 -- ORDER BY c.customer_id
-Group by c.customer_name;
+Group by customer_name;
 
 -- C
 SELECT DISTINCT p.product_name, p.price
@@ -117,7 +117,7 @@ WHERE o.order_id is NULL;
 SELECT customer_name, address
 FROM CUSTOMER
 WHERE CUSTOMER_ID NOT IN (SELECT DISTINCT CUSTOMER_ID
-                          FROM ORDER_)
+                          FROM ORDER_);
                             
 -- E
 SELECT C.CUSTOMER_NAME
@@ -132,7 +132,6 @@ WHERE EXISTS(
              WHERE p.category = 'A' -- A = Clothing
                 AND C.CUSTOMER_ID = O.CUSTOMER_ID 
              GROUP BY O.CUSTOMER_ID
-             HAVING COUNT(*) >= 1
              );
 
 -- SOLUTION - 6                          
